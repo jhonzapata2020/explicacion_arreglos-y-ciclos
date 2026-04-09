@@ -1,7 +1,6 @@
-:root {
+﻿:root {
   --bg: #f4f7fb;
   --panel: rgba(255, 255, 255, 0.9);
-  --panel-strong: #ffffff;
   --text: #122033;
   --muted: #607089;
   --primary: #0f5cab;
@@ -9,6 +8,7 @@
   --accent: #ff8a3d;
   --success: #10b981;
   --active: #ffe8d8;
+  --selected: #e0f2fe;
   --border: rgba(18, 32, 51, 0.1);
   --shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
 }
@@ -55,8 +55,8 @@ pre {
 
 .hero-copy h1 {
   margin: 10px 0 14px;
-  font-size: clamp(2.4rem, 4vw, 4.5rem);
-  line-height: 0.96;
+  font-size: clamp(2.2rem, 4vw, 4.1rem);
+  line-height: 1.02;
   letter-spacing: -0.05em;
 }
 
@@ -82,15 +82,13 @@ pre {
 
 .hero-card {
   padding: 24px;
-  background:
-    linear-gradient(135deg, rgba(15, 92, 171, 0.95), rgba(12, 36, 68, 0.9)),
-    var(--panel);
+  background: linear-gradient(135deg, rgba(15, 92, 171, 0.95), rgba(12, 36, 68, 0.9));
   color: white;
 }
 
 .hero-card-text {
-  font-size: 1.2rem;
-  line-height: 1.6;
+  font-size: 1.15rem;
+  line-height: 1.7;
   margin: 12px 0 0;
 }
 
@@ -172,10 +170,7 @@ pre {
   margin-bottom: 20px;
 }
 
-.panel {
-  padding: 24px;
-}
-
+.panel,
 .panel-wide {
   padding: 24px;
 }
@@ -219,7 +214,15 @@ pre {
   padding: 18px;
   border: 1px solid var(--border);
   background: #f8fafc;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.array-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
 }
 
 .array-item.visited {
@@ -230,7 +233,12 @@ pre {
 .array-item.active {
   background: var(--active);
   border-color: rgba(255, 138, 61, 0.5);
-  transform: translateY(-4px);
+}
+
+.array-item.selected {
+  background: var(--selected);
+  border-color: rgba(14, 116, 144, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(14, 116, 144, 0.1);
 }
 
 .array-item h3 {
@@ -255,6 +263,7 @@ pre {
 }
 
 .explanation-box,
+.click-box,
 .summary-card,
 .script-box,
 .comparison > div {
@@ -263,14 +272,15 @@ pre {
   border: 1px solid var(--border);
 }
 
-.explanation-box {
+.explanation-box,
+.click-box {
   margin-top: 18px;
   padding: 18px;
 }
 
 .step-explanation {
   margin: 12px 0 0;
-  font-size: 1.02rem;
+  font-size: 1rem;
   line-height: 1.8;
 }
 
@@ -283,6 +293,7 @@ pre {
   font-size: 0.95rem;
   line-height: 1.9;
   overflow: auto;
+  min-height: 260px;
 }
 
 .summary-grid,
@@ -303,7 +314,7 @@ pre {
 .summary-card strong {
   display: block;
   margin-top: 10px;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 .teaching-grid {

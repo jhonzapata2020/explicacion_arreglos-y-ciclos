@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ciclos y Arreglos</title>
+    <title>Listas y ciclos en Python</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,16 +16,18 @@
     <main class="page">
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">pagina de explicacion de arreglos</p>
-          <h1>Cómo se recorre un arreglo con <span>for</span>, <span>while</span> y <span>do...while</span></h1>
+          <p class="eyebrow">Mini pagina para explicar en clase</p>
+          <h1>Como se recorre una <span>lista</span> en Python con <span>for</span> y <span>while</span></h1>
           <p class="lead">
-            Piensa en un arreglo como una fila de pedidos. La variable <code>i</code> es el dedo que va señalando una casilla a la vez.
+            Piensa en la lista como una fila de pedidos. La variable <code>i</code> es el dedo que va senalando una posicion a la vez: 0, 1, 2, 3...
           </p>
         </div>
 
         <div class="hero-card">
           <p class="small-label">Idea clave</p>
-          <p class="hero-card-text">Un arreglo no se recorre “de golpe”. Se visita posición por posición: 0, 1, 2, 3...</p>
+          <p class="hero-card-text">
+            Haz clic en una tarjeta para ver que indice seleccionaste, como se lee en Python y que haria el ciclo cuando llegue a esa posicion.
+          </p>
         </div>
       </section>
 
@@ -41,7 +43,7 @@
         </div>
 
         <div class="control-group">
-          <p class="small-label">Simulación</p>
+          <p class="small-label">Simulacion</p>
           <div class="button-row">
             <button id="step-btn" class="btn btn-primary">Siguiente paso</button>
             <button id="reset-btn" class="btn btn-soft">Reiniciar</button>
@@ -53,7 +55,7 @@
         <article class="panel panel-wide">
           <div class="panel-head">
             <div>
-              <p class="small-label">Visual del arreglo</p>
+              <p class="small-label">Visual de la lista</p>
               <h2 id="scenario-title">Restaurante</h2>
             </div>
             <div class="status-pill" id="pointer-pill">i = 0</div>
@@ -64,13 +66,18 @@
           <div class="array-grid" id="array-grid"></div>
 
           <div class="explanation-box">
-            <p class="small-label">Qué está pasando</p>
+            <p class="small-label">Que esta pasando</p>
             <p id="step-explanation" class="step-explanation"></p>
+          </div>
+
+          <div class="click-box">
+            <p class="small-label">Si haces clic en una tarjeta</p>
+            <p id="click-explanation" class="step-explanation"></p>
           </div>
         </article>
 
         <article class="panel">
-          <p class="small-label">Código</p>
+          <p class="small-label">Codigo en Python</p>
           <pre class="code-block" id="code-block"></pre>
 
           <div class="summary-grid">
@@ -79,8 +86,8 @@
               <strong id="visited-count">0</strong>
             </div>
             <div class="summary-card">
-              <p class="small-label">Acumulado</p>
-              <strong id="total-price">$0</strong>
+              <p class="small-label">Elemento</p>
+              <strong id="selected-item">Bandeja</strong>
             </div>
           </div>
         </article>
@@ -88,29 +95,29 @@
 
       <section class="teaching-grid">
         <article class="panel">
-          <p class="small-label">Explicacion</p>
+          <p class="small-label">Como explicarlo</p>
           <div class="script-box">
-            <p>"Este arreglo es una fila de pedidos."</p>
-            <p>"La variable <code>i</code> me dice en qué casilla voy."</p>
-            <p>"Empiezo en 0 porque la primera posición del arreglo es 0."</p>
-            <p>"Luego avanzo: 0, 1, 2, 3... hasta llegar al final."</p>
+            <p>"Esto no es magia: es una lista con posiciones numeradas."</p>
+            <p>"La primera posicion siempre es 0."</p>
+            <p>"Si hago clic en el indice 2, en Python lo leo como <code>pedido[2]</code>."</p>
+            <p>"Un ciclo recorre una posicion por vez hasta llegar al final de la lista."</p>
           </div>
         </article>
 
         <article class="panel">
-          <p class="small-label">Cuándo usar cada ciclo</p>
+          <p class="small-label">Cuando usar cada ciclo</p>
           <div class="comparison">
             <div>
               <h3>for</h3>
-              <p>Úsalo cuando ya sabes cuántos elementos tiene el arreglo.</p>
+              <p>Usalo cuando quieres recorrer toda la lista con claridad usando <code>range(len(...))</code>.</p>
             </div>
             <div>
               <h3>while</h3>
-              <p>Úsalo cuando quieres repetir mientras la condición sea verdadera.</p>
+              <p>Usalo cuando quieres avanzar manualmente con <code>i += 1</code> mientras la condicion siga siendo verdadera.</p>
             </div>
             <div>
               <h3>do...while</h3>
-              <p>Úsalo cuando el bloque debe ejecutarse al menos una vez.</p>
+              <p>Sirve para comparar, pero aclara en clase que Python no tiene esta estructura de forma nativa.</p>
             </div>
           </div>
         </article>
@@ -119,4 +126,4 @@
 
     <script src="./script.js"></script>
   </body>
-  </html>
+</html>

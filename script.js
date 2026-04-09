@@ -1,7 +1,7 @@
-const scenarios = {
+﻿const scenarios = {
   restaurante: {
     title: 'Restaurante',
-    subtitle: 'Cada casilla del arreglo representa un plato o bebida del pedido.',
+    subtitle: 'Cada posicion de la lista guarda un plato o bebida del pedido.',
     items: [
       { name: 'Bandeja', type: 'Almuerzo', price: 22000, time: 14 },
       { name: 'Sopa', type: 'Entrada', price: 9000, time: 8 },
@@ -10,8 +10,8 @@ const scenarios = {
     ],
   },
   pizzeria: {
-    title: 'Pizzería',
-    subtitle: 'Aquí el arreglo guarda las pizzas de una orden.',
+    title: 'Pizzeria',
+    subtitle: 'Aqui la lista guarda las pizzas de una orden.',
     items: [
       { name: 'Hawaiana', type: 'Mediana', price: 28000, time: 18 },
       { name: 'Pepperoni', type: 'Grande', price: 32000, time: 20 },
@@ -20,11 +20,11 @@ const scenarios = {
     ],
   },
   rapidas: {
-    title: 'Comidas rápidas',
-    subtitle: 'El arreglo ahora es una fila de productos del combo.',
+    title: 'Comidas rapidas',
+    subtitle: 'La lista ahora representa los productos de un combo.',
     items: [
       { name: 'Hamburguesa', type: 'Combo', price: 18000, time: 9 },
-      { name: 'Papas', type: 'Acompañante', price: 6000, time: 4 },
+      { name: 'Papas', type: 'Acompanante', price: 6000, time: 4 },
       { name: 'Gaseosa', type: 'Bebida', price: 5000, time: 2 },
       { name: 'Helado', type: 'Postre', price: 7000, time: 3 },
     ],
@@ -34,31 +34,35 @@ const scenarios = {
 const loopModes = {
   for: {
     label: 'for',
-    code: [
-      'for (let i = 0; i < pedido.length; i++) {',
-      '  console.log(pedido[i]);',
-      '}',
-    ],
+    buildCode(items, index) {
+      const values = items.map((item) => `"${item.name}"`).join(', ');
+      return [
+        `pedido = [${values}]`,
+        '',
+        `for i in range(len(pedido)):` ,
+        `    print(i, pedido[i])`,
+        '',
+        `# Si i = ${index}, Python lee pedido[${index}]`,
+        `print(pedido[${index}])  # "${items[index].name}"`,
+      ];
+    },
   },
   while: {
     label: 'while',
-    code: [
-      'let i = 0;',
-      'while (i < pedido.length) {',
-      '  console.log(pedido[i]);',
-      '  i++;',
-      '}',
-    ],
-  },
-  'do-while': {
-    label: 'do...while',
-    code: [
-      'let i = 0;',
-      'do {',
-      '  console.log(pedido[i]);',
-      '  i++;',
-      '} while (i < pedido.length);',
-    ],
+    buildCode(items, index) {
+      const values = items.map((item) => `"${item.name}"`).join(', ');
+      return [
+        `pedido = [${values}]`,
+        `i = 0`,
+        '',
+        `while i < len(pedido):`,
+        `    print(i, pedido[i])`,
+        `    i += 1`,
+        '',
+        `# Si selecciono el indice ${index}`,
+        `print(pedido[${index}])  # "${items[index].name}"`,
+      ];
+    },
   },
 };
 
@@ -66,6 +70,7 @@ const state = {
   scenario: 'restaurante',
   loop: 'for',
   step: 0,
+  selectedIndex: 0,
 };
 
 const money = new Intl.NumberFormat('es-CO', {
@@ -82,8 +87,9 @@ const pointerPill = document.getElementById('pointer-pill');
 const scenarioTitle = document.getElementById('scenario-title');
 const scenarioSubtitle = document.getElementById('scenario-subtitle');
 const stepExplanation = document.getElementById('step-explanation');
+const clickExplanation = document.getElementById('click-explanation');
 const visitedCount = document.getElementById('visited-count');
-const totalPrice = document.getElementById('total-price');
+const selectedItem = document.getElementById('selected-item');
 const stepBtn = document.getElementById('step-btn');
 const resetBtn = document.getElementById('reset-btn');
 
@@ -95,6 +101,18 @@ function createButton(label, active, onClick) {
   return button;
 }
 
+function currentScenario() {
+  return scenarios[state.scenario];
+}
+
+function currentItems() {
+  return currentScenario().items;
+}
+
+function createPythonCode(index) {
+  return loopModes[state.loop].buildCode(currentItems(), index).join('\n');
+}
+
 function renderButtons() {
   scenarioButtons.innerHTML = '';
   loopButtons.innerHTML = '';
@@ -104,6 +122,7 @@ function renderButtons() {
       createButton(value.title, state.scenario === key, () => {
         state.scenario = key;
         state.step = 0;
+        state.selectedIndex = 0;
         render();
       })
     );
@@ -113,7 +132,6 @@ function renderButtons() {
     loopButtons.appendChild(
       createButton(value.label, state.loop === key, () => {
         state.loop = key;
-        state.step = 0;
         render();
       })
     );
@@ -121,19 +139,21 @@ function renderButtons() {
 }
 
 function renderArray() {
-  const scenario = scenarios[state.scenario];
-  const done = state.step >= scenario.items.length;
+  const items = currentItems();
+  const done = state.step >= items.length;
 
   arrayGrid.innerHTML = '';
 
-  scenario.items.forEach((item, index) => {
-    const card = document.createElement('article');
+  items.forEach((item, index) => {
+    const card = document.createElement('button');
     const visited = index < state.step;
-    const active = !done && index === state.step;
+    const activeStep = !done && index === state.step;
+    const selected = index === state.selectedIndex;
 
-    card.className = `array-item${visited ? ' visited' : ''}${active ? ' active' : ''}`;
+    card.type = 'button';
+    card.className = `array-item${visited ? ' visited' : ''}${activeStep ? ' active' : ''}${selected ? ' selected' : ''}`;
     card.innerHTML = `
-      <p class="small-label">Índice ${index}</p>
+      <p class="small-label">Indice ${index}</p>
       <h3>${item.name}</h3>
       <p>${item.type}</p>
       <div class="meta">
@@ -141,42 +161,57 @@ function renderArray() {
         <span>${item.time} min</span>
       </div>
     `;
+    card.addEventListener('click', () => {
+      state.selectedIndex = index;
+      pointerPill.textContent = `i = ${index}`;
+      renderCode();
+      renderClickExplanation();
+      renderArray();
+      renderSummary();
+    });
 
     arrayGrid.appendChild(card);
   });
 }
 
 function renderCode() {
-  codeBlock.textContent = loopModes[state.loop].code.join('\n');
+  codeBlock.textContent = createPythonCode(state.selectedIndex);
 }
 
 function renderSummary() {
-  const items = scenarios[state.scenario].items;
+  const items = currentItems();
   const visitedItems = items.slice(0, state.step);
-  const total = visitedItems.reduce((sum, item) => sum + item.price, 0);
-
   visitedCount.textContent = String(visitedItems.length);
-  totalPrice.textContent = money.format(total);
+  selectedItem.textContent = items[state.selectedIndex].name;
 }
 
-function renderExplanation() {
-  const scenario = scenarios[state.scenario];
-  const items = scenario.items;
+function renderStepExplanation() {
+  const items = currentItems();
   const done = state.step >= items.length;
 
-  scenarioTitle.textContent = scenario.title;
-  scenarioSubtitle.textContent = scenario.subtitle;
+  scenarioTitle.textContent = currentScenario().title;
+  scenarioSubtitle.textContent = currentScenario().subtitle;
 
   if (done) {
     pointerPill.textContent = `i = ${items.length}`;
     stepExplanation.textContent =
-      'Ya terminamos el recorrido. El ciclo visitó todas las posiciones del arreglo, desde 0 hasta length - 1.';
+      'Ya terminamos el recorrido. El ciclo paso por todas las posiciones de la lista, desde 0 hasta len(lista) - 1.';
     return;
   }
 
   const current = items[state.step];
   pointerPill.textContent = `i = ${state.step}`;
-  stepExplanation.textContent = `Estamos leyendo la posición ${state.step}. En esa casilla está ${current.name}. Cuando termine esta vuelta, el ciclo avanzará a la siguiente posición.`;
+  stepExplanation.textContent = `Ahora el ciclo va en i = ${state.step}. Eso significa que Python esta leyendo la posicion ${state.step}, donde esta "${current.name}".`;
+}
+
+function renderClickExplanation() {
+  const item = currentItems()[state.selectedIndex];
+
+  clickExplanation.innerHTML = `
+    Seleccionaste el <strong>indice ${state.selectedIndex}</strong>. En esa posicion esta <strong>${item.name}</strong>.
+    En Python se lee como <code>pedido[${state.selectedIndex}]</code>. Si el ciclo llega a <code>i = ${state.selectedIndex}</code>,
+    entonces ese sera el elemento que va a mostrar o procesar.
+  `;
 }
 
 function render() {
@@ -184,18 +219,26 @@ function render() {
   renderArray();
   renderCode();
   renderSummary();
-  renderExplanation();
+  renderStepExplanation();
+  renderClickExplanation();
 }
 
 stepBtn.addEventListener('click', () => {
-  const length = scenarios[state.scenario].items.length;
+  const length = currentItems().length;
   state.step = Math.min(state.step + 1, length);
+  if (state.step < length) {
+    state.selectedIndex = state.step;
+  }
   render();
 });
 
 resetBtn.addEventListener('click', () => {
   state.step = 0;
+  state.selectedIndex = 0;
   render();
 });
 
 render();
+
+
+
