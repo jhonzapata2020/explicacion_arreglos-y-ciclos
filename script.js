@@ -221,12 +221,15 @@ function renderArray() {
   });
 
   // Agregar botones de accion agrupados para diferenciarlos de los items
-  const actionsWrapper = document.createElement('div');
-  actionsWrapper.className = 'grid-actions';
-  actionsWrapper.appendChild(stepBtn);
-  actionsWrapper.appendChild(resetBtn);
-  
-  arrayGrid.appendChild(actionsWrapper);
+  const controlsContainer = document.getElementById('simulation-controls');
+  if (controlsContainer) {
+    controlsContainer.innerHTML = '';
+    const actionsWrapper = document.createElement('div');
+    actionsWrapper.className = 'grid-actions';
+    actionsWrapper.appendChild(stepBtn);
+    actionsWrapper.appendChild(resetBtn);
+    controlsContainer.appendChild(actionsWrapper);
+  }
 }
 
 function renderCode() {
@@ -338,3 +341,26 @@ if (heroCta) {
     }
   });
 }
+
+// Medidor de visitas globales
+async function updateVisitCount() {
+  const countElement = document.getElementById('visit-count');
+  if (!countElement) return;
+
+  try {
+    // Usamos counterapi.dev - namespace y key unicos para este proyecto
+    const response = await fetch('https://api.counterapi.dev/v1/mini-pagina-ciclos-pedagogica/visit-count/up');
+    const data = await response.json();
+    
+    if (data && data.count) {
+      // Formatear el numero con puntos de miles para consistencia
+      const formatter = new Intl.NumberFormat('es-CO');
+      countElement.textContent = formatter.format(data.count);
+    }
+  } catch (error) {
+    console.error('Error al cargar el contador de visitas:', error);
+    countElement.textContent = '---';
+  }
+}
+
+updateVisitCount();
