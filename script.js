@@ -316,3 +316,25 @@ resetBtn.addEventListener('click', () => {
 });
 
 render();
+
+// Scroll suave hacia la simulación
+const heroCta = document.getElementById('hero-cta');
+if (heroCta) {
+  heroCta.addEventListener('click', () => {
+    const target = document.getElementById('array-grid');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // Resaltar el botón de inicio con una pequeña animación
+      setTimeout(() => {
+        if (stepBtn) {
+          stepBtn.style.transform = 'scale(1.15)';
+          stepBtn.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          setTimeout(() => {
+            stepBtn.style.transform = 'scale(1)';
+          }, 400);
+        }
+      }, 750);
+    }
+  });
+}
