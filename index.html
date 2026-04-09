@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -26,12 +26,12 @@
         <div class="hero-card">
           <p class="small-label">Idea clave</p>
           <p class="hero-card-text">
-            Haz clic en una tarjeta para ver que indice seleccionaste, como se lee en Python y que haria el ciclo cuando llegue a esa posicion.
+            Haz clic en una tarjeta para ver que indice seleccionaste, como se lee en Python y como se veria la misma informacion en una estructura con claves y valores.
           </p>
         </div>
       </section>
 
-      <section class="controls">
+      <section class="controls controls-two">
         <div class="control-group">
           <p class="small-label">Contexto</p>
           <div class="button-row" id="scenario-buttons"></div>
@@ -40,14 +40,6 @@
         <div class="control-group">
           <p class="small-label">Ciclo</p>
           <div class="button-row" id="loop-buttons"></div>
-        </div>
-
-        <div class="control-group">
-          <p class="small-label">Simulacion</p>
-          <div class="button-row">
-            <button id="step-btn" class="btn btn-primary">Siguiente paso</button>
-            <button id="reset-btn" class="btn btn-soft">Reiniciar</button>
-          </div>
         </div>
       </section>
 
@@ -58,12 +50,20 @@
               <p class="small-label">Visual de la lista</p>
               <h2 id="scenario-title">Restaurante</h2>
             </div>
-            <div class="status-pill" id="pointer-pill">i = 0</div>
+            <div class="status-wrap">
+              <div class="small-label">Indice actual</div>
+              <div class="status-pill" id="pointer-pill">i = 0</div>
+            </div>
           </div>
 
           <p class="panel-subtitle" id="scenario-subtitle"></p>
 
           <div class="array-grid" id="array-grid"></div>
+
+          <div class="code-actions-center">
+            <button id="step-btn" class="btn btn-primary btn-large">Siguiente paso</button>
+            <button id="reset-btn" class="btn btn-soft">Reiniciar</button>
+          </div>
 
           <div class="explanation-box">
             <p class="small-label">Que esta pasando</p>
@@ -76,8 +76,16 @@
           </div>
         </article>
 
-        <article class="panel">
-          <p class="small-label">Codigo en Python</p>
+        <article class="panel panel-code">
+          <div class="panel-head panel-head-compact panel-head-actions">
+            <div>
+              <p class="small-label">Codigo y estructura</p>
+              <h3 class="panel-mini-title">Python y JSON</h3>
+            </div>
+            <div class="mini-switch" id="view-buttons"></div>
+          </div>
+
+
           <pre class="code-block" id="code-block"></pre>
 
           <div class="summary-grid">
@@ -93,7 +101,7 @@
         </article>
       </section>
 
-      <section class="teaching-grid">
+      <section class="teaching-grid teaching-grid-3">
         <article class="panel">
           <p class="small-label">Como explicarlo</p>
           <div class="script-box">
@@ -101,6 +109,24 @@
             <p>"La primera posicion siempre es 0."</p>
             <p>"Si hago clic en el indice 2, en Python lo leo como <code>pedido[2]</code>."</p>
             <p>"Un ciclo recorre una posicion por vez hasta llegar al final de la lista."</p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <p class="small-label">Lo mas usado en Python</p>
+          <div class="comparison">
+            <div>
+              <h3>Lista</h3>
+              <p>Guarda varios elementos en orden. Se accede por indice: <code>pedido[0]</code>.</p>
+            </div>
+            <div>
+              <h3>Diccionario</h3>
+              <p>Guarda datos por clave y valor. Ejemplo: <code>{"nombre": "Bandeja"}</code>.</p>
+            </div>
+            <div>
+              <h3>Tupla</h3>
+              <p>Se parece a la lista, pero normalmente no se modifica. Sirve para guardar datos fijos.</p>
+            </div>
           </div>
         </article>
 
@@ -116,8 +142,8 @@
               <p>Usalo cuando quieres avanzar manualmente con <code>i += 1</code> mientras la condicion siga siendo verdadera.</p>
             </div>
             <div>
-              <h3>do...while</h3>
-              <p>Sirve para comparar, pero aclara en clase que Python no tiene esta estructura de forma nativa.</p>
+              <h3>Problema real</h3>
+              <p>Muchas veces la lista no guarda solo nombres: guarda diccionarios con claves como <code>nombre</code>, <code>precio</code> y <code>tiempo</code>.</p>
             </div>
           </div>
         </article>

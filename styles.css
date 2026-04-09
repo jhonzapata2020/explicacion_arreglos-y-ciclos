@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #f4f7fb;
   --panel: rgba(255, 255, 255, 0.9);
   --text: #122033;
@@ -34,9 +34,9 @@ pre {
 }
 
 .page {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1240px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 32px 0 48px;
+  padding: 64px 0 80px;
 }
 
 .hero,
@@ -44,13 +44,13 @@ pre {
 .dashboard,
 .teaching-grid {
   display: grid;
-  gap: 20px;
+  gap: 32px;
 }
 
 .hero {
   grid-template-columns: 1.35fr 0.65fr;
   align-items: end;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .hero-copy h1 {
@@ -111,7 +111,11 @@ pre {
 
 .controls {
   grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+}
+
+.controls-two {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .control-group {
@@ -122,11 +126,35 @@ pre {
   backdrop-filter: blur(16px);
 }
 
-.button-row {
+.button-row,
+.mini-switch {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 14px;
+}
+
+.button-row-inline {
+  margin-top: 0;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.code-actions-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0;
+  padding: 24px;
+  background: rgba(15, 92, 171, 0.03);
+  border-radius: 32px;
+  border: 1px dashed var(--border);
+}
+
+.btn-large {
+  padding: 16px 32px;
+  font-size: 1.1rem;
 }
 
 .btn {
@@ -165,14 +193,19 @@ pre {
   color: #432100;
 }
 
+.btn-compact {
+  padding: 8px 14px;
+  font-size: 0.92rem;
+}
+
 .dashboard {
   grid-template-columns: 1.35fr 0.65fr;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
 }
 
 .panel,
 .panel-wide {
-  padding: 24px;
+  padding: 32px;
 }
 
 .panel-head {
@@ -182,16 +215,39 @@ pre {
   align-items: center;
 }
 
-.panel-head h2 {
+.panel-head-compact {
+  align-items: flex-start;
+}
+
+.panel-head-actions {
+  margin-bottom: 18px;
+}
+
+.panel-head h2,
+.panel-mini-title {
   margin: 8px 0 0;
-  font-size: 2rem;
   line-height: 1;
+}
+
+.panel-head h2 {
+  font-size: 2rem;
+}
+
+.panel-mini-title {
+  font-size: 1.1rem;
 }
 
 .panel-subtitle {
   margin: 14px 0 0;
   color: var(--muted);
   line-height: 1.7;
+}
+
+.status-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 }
 
 .status-pill {
@@ -202,11 +258,17 @@ pre {
   font-weight: 800;
 }
 
+.code-actions {
+  justify-content: flex-end;
+  margin-top: 6px;
+  margin-bottom: 18px;
+}
+
 .array-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px;
-  margin-top: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  margin-top: 32px;
 }
 
 .array-item {
@@ -274,8 +336,8 @@ pre {
 
 .explanation-box,
 .click-box {
-  margin-top: 18px;
-  padding: 18px;
+  margin-top: 24px;
+  padding: 24px;
 }
 
 .step-explanation {
@@ -285,15 +347,16 @@ pre {
 }
 
 .code-block {
-  margin: 12px 0 0;
+  margin: 0;
   padding: 18px;
   border-radius: 22px;
   background: #09111f;
   color: #e6edf7;
-  font-size: 0.95rem;
-  line-height: 1.9;
+  font-size: 0.92rem;
+  line-height: 1.8;
   overflow: auto;
-  min-height: 260px;
+  min-height: 330px;
+  white-space: pre-wrap;
 }
 
 .summary-grid,
@@ -321,6 +384,10 @@ pre {
   grid-template-columns: repeat(2, 1fr);
 }
 
+.teaching-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .script-box,
 .comparison > div {
   padding: 18px;
@@ -346,12 +413,24 @@ pre {
   font-size: 1.15rem;
 }
 
+@media (max-width: 1040px) {
+  .teaching-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 920px) {
   .hero,
   .controls,
   .dashboard,
-  .teaching-grid {
+  .teaching-grid,
+  .controls-two {
     grid-template-columns: 1fr;
+  }
+
+  .button-row-inline,
+  .code-actions {
+    justify-content: flex-start;
   }
 }
 
@@ -364,8 +443,18 @@ pre {
   .panel,
   .control-group,
   .hero-card {
-    padding: 18px;
-    border-radius: 22px;
+    padding: 24px;
+    border-radius: 28px;
+  }
+
+  .code-actions-center {
+    flex-direction: column;
+    padding: 20px;
+    gap: 12px;
+  }
+
+  .btn-large {
+    width: 100%;
   }
 
   .panel-head {

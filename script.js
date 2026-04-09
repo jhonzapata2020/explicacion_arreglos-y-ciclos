@@ -1,4 +1,4 @@
-﻿const scenarios = {
+const scenarios = {
   restaurante: {
     title: 'Restaurante',
     subtitle: 'Cada posicion de la lista guarda un plato o bebida del pedido.',
@@ -66,11 +66,17 @@ const loopModes = {
   },
 };
 
+const viewModes = {
+  python: 'Python',
+  json: 'JSON',
+};
+
 const state = {
   scenario: 'restaurante',
   loop: 'for',
   step: 0,
   selectedIndex: 0,
+  view: 'python',
 };
 
 const money = new Intl.NumberFormat('es-CO', {
@@ -81,6 +87,7 @@ const money = new Intl.NumberFormat('es-CO', {
 
 const scenarioButtons = document.getElementById('scenario-buttons');
 const loopButtons = document.getElementById('loop-buttons');
+const viewButtons = document.getElementById('view-buttons');
 const arrayGrid = document.getElementById('array-grid');
 const codeBlock = document.getElementById('code-block');
 const pointerPill = document.getElementById('pointer-pill');
@@ -93,9 +100,9 @@ const selectedItem = document.getElementById('selected-item');
 const stepBtn = document.getElementById('step-btn');
 const resetBtn = document.getElementById('reset-btn');
 
-function createButton(label, active, onClick) {
+function createButton(label, active, onClick, compact = false) {
   const button = document.createElement('button');
-  button.className = `btn ${active ? 'is-active' : 'btn-ghost'}`;
+  button.className = `btn ${active ? 'is-active' : 'btn-ghost'}${compact ? ' btn-compact' : ''}`;
   button.textContent = label;
   button.addEventListener('click', onClick);
   return button;
@@ -109,13 +116,43 @@ function currentItems() {
   return currentScenario().items;
 }
 
+function currentObject(index) {
+  const item = currentItems()[index];
+  return {
+    nombre: item.name,
+    categoria: item.type,
+    precio: item.price,
+    tiempo: item.time,
+  };
+}
+
 function createPythonCode(index) {
   return loopModes[state.loop].buildCode(currentItems(), index).join('\n');
+}
+
+function createJsonCode(index) {
+  const items = currentItems().map((item) => ({
+    nombre: item.name,
+    categoria: item.type,
+    precio: item.price,
+    tiempo: item.time,
+  }));
+  const selected = currentObject(index);
+  return [
+    'Lista de diccionarios:',
+    JSON.stringify(items, null, 2),
+    '',
+    `Elemento seleccionado en la posicion ${index}:`,
+    JSON.stringify(selected, null, 2),
+    '',
+    `Clave y valor ejemplo: nombre -> "${selected.nombre}"`,
+  ].join('\n');
 }
 
 function renderButtons() {
   scenarioButtons.innerHTML = '';
   loopButtons.innerHTML = '';
+  viewButtons.innerHTML = '';
 
   Object.entries(scenarios).forEach(([key, value]) => {
     scenarioButtons.appendChild(
@@ -132,8 +169,18 @@ function renderButtons() {
     loopButtons.appendChild(
       createButton(value.label, state.loop === key, () => {
         state.loop = key;
+        state.view = 'python';
         render();
       })
+    );
+  });
+
+  Object.entries(viewModes).forEach(([key, label]) => {
+    viewButtons.appendChild(
+      createButton(label, state.view === key, () => {
+        state.view = key;
+        renderCode();
+      }, true)
     );
   });
 }
@@ -175,7 +222,9 @@ function renderArray() {
 }
 
 function renderCode() {
-  codeBlock.textContent = createPythonCode(state.selectedIndex);
+  codeBlock.textContent = state.view === 'python'
+    ? createPythonCode(state.selectedIndex)
+    : createJsonCode(state.selectedIndex);
 }
 
 function renderSummary() {
@@ -196,12 +245,30 @@ function renderStepExplanation() {
     pointerPill.textContent = `i = ${items.length}`;
     stepExplanation.textContent =
       'Ya terminamos el recorrido. El ciclo paso por todas las posiciones de la lista, desde 0 hasta len(lista) - 1.';
+    updateStepButton();
     return;
   }
 
   const current = items[state.step];
   pointerPill.textContent = `i = ${state.step}`;
   stepExplanation.textContent = `Ahora el ciclo va en i = ${state.step}. Eso significa que Python esta leyendo la posicion ${state.step}, donde esta "${current.name}".`;
+
+  updateStepButton();
+}
+
+function updateStepButton() {
+  const items = currentItems();
+  const done = state.step >= items.length;
+
+  if (done) {
+    stepBtn.textContent = 'Recorrido finalizado';
+    stepBtn.disabled = true;
+    stepBtn.style.opacity = '0.5';
+  } else {
+    stepBtn.textContent = state.step === 0 ? 'Iniciar recorrido' : 'Siguiente paso';
+    stepBtn.disabled = false;
+    stepBtn.style.opacity = '1';
+  }
 }
 
 function renderClickExplanation() {
@@ -209,8 +276,8 @@ function renderClickExplanation() {
 
   clickExplanation.innerHTML = `
     Seleccionaste el <strong>indice ${state.selectedIndex}</strong>. En esa posicion esta <strong>${item.name}</strong>.
-    En Python se lee como <code>pedido[${state.selectedIndex}]</code>. Si el ciclo llega a <code>i = ${state.selectedIndex}</code>,
-    entonces ese sera el elemento que va a mostrar o procesar.
+    En Python se lee como <code>pedido[${state.selectedIndex}]</code>. En una lista de diccionarios, ese mismo elemento tendria claves como
+    <code>nombre</code>, <code>categoria</code>, <code>precio</code> y <code>tiempo</code>.
   `;
 }
 
@@ -221,6 +288,7 @@ function render() {
   renderSummary();
   renderStepExplanation();
   renderClickExplanation();
+  updateStepButton();
 }
 
 stepBtn.addEventListener('click', () => {
@@ -235,10 +303,8 @@ stepBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', () => {
   state.step = 0;
   state.selectedIndex = 0;
+  state.view = 'python';
   render();
 });
 
 render();
-
-
-
