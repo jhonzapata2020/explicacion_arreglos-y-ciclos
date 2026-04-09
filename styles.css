@@ -151,6 +151,15 @@ pre {
   padding: 14px 24px;
   min-height: unset;
   border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+#step-btn {
+  min-width: 240px;
+}
+
+#reset-btn {
+  min-width: 130px;
 }
 
 #reset-btn {
@@ -472,6 +481,7 @@ pre {
   #reset-btn {
     min-height: unset;
     padding: 12px 20px;
+    min-width: 100%;
   }
 
   .grid-actions {
