@@ -219,6 +219,14 @@ function renderArray() {
 
     arrayGrid.appendChild(card);
   });
+
+  // Agregar botones de accion agrupados para diferenciarlos de los items
+  const actionsWrapper = document.createElement('div');
+  actionsWrapper.className = 'grid-actions';
+  actionsWrapper.appendChild(stepBtn);
+  actionsWrapper.appendChild(resetBtn);
+  
+  arrayGrid.appendChild(actionsWrapper);
 }
 
 function renderCode() {
